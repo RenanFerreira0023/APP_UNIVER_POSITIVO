@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CriarPersonagem.EscolherRacaFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <!-- Novo TextView para o nome do personagem -->
+        <TextView
+            android:id="@+id/textNomePersonagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Qual o nome do personagem?"
+            android:textSize="24sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Novo EditText para entrada do nome do personagem -->
+        <EditText
+            android:id="@+id/editNomePersonagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Digite o nome do personagem"
+            android:layout_below="@id/textNomePersonagem"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textEscolhaRaca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escolha uma raça"
+            android:textSize="24sp"
+            android:layout_below="@id/editNomePersonagem"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"/>
+
+        <Spinner
+            android:id="@+id/spinnerRacas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textEscolhaRaca"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnProximo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Próximo"
+            android:layout_below="@id/spinnerRacas"
+            android:layout_marginTop="16dp"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
