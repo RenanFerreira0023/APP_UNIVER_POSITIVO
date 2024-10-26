@@ -14,6 +14,12 @@ import org.appsskilldeveloper.personagem.Racas.*
 import org.example.atributos.*
 
 class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentInteractionListener {
+
+    private val CHANNEL_ID = "channel_id_example_01"
+    private val notificationId = 101
+    private val REQUEST_CODE_NOTIFICATION_PERMISSION = 100
+
+
     lateinit var personagem_X: NovoPersonagem
     private var fragmentIndex = 0
     private var fragmentos = listOf(
@@ -31,8 +37,16 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
 
 
     var GLOBAL_NOME_PERSONAGEM = ""
+    // Função para criar e exibir a notificação
+
+
+
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_actv_criar_personagem)
@@ -45,6 +59,12 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
 
         // Iniciar com o primeiro fragmento
         navegarParaFragmento(fragmentIndex)
+
+
+
+
+
+
     }
 
 
