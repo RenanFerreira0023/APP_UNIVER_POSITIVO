@@ -15,14 +15,10 @@ import org.example.atributos.*
 
 class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentInteractionListener {
 
-    private val CHANNEL_ID = "channel_id_example_01"
-    private val notificationId = 101
-    private val REQUEST_CODE_NOTIFICATION_PERMISSION = 100
 
-
-    lateinit var personagem_X: NovoPersonagem
-    private var fragmentIndex = 0
-    private var fragmentos = listOf(
+    lateinit var PERSONAGEM_X: NovoPersonagem
+    private var FRAGMENT_INDEX = 0
+    private var LISTA_FRAGMENTOS = listOf(
         EscolherRacaFragment(),
         PersonagemFragment("Força"),
         PersonagemFragment("Destreza"),
@@ -32,16 +28,8 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
         PersonagemFragment("Sabedoria"),
         FinalizarFragment()
     )
-
-    private val dadosPersonagem = mutableListOf<String>()
-
-
+    private val DADOS_PERSONAGEM = mutableListOf<String>()
     var GLOBAL_NOME_PERSONAGEM = ""
-    // Função para criar e exibir a notificação
-
-
-
-
 
 
 
@@ -58,26 +46,21 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
         }
 
         // Iniciar com o primeiro fragmento
-        navegarParaFragmento(fragmentIndex)
-
-
-
-
-
+        navegarParaFragmento(FRAGMENT_INDEX)
 
     }
-
-
     var VALOR_INICIAL = 27
     var restante = VALOR_INICIAL
     override fun onFragmentViewCreated(fragment: PersonagemFragment) {
         fragment.atualizarTextoResto("Restam $restante pontos")
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
     private fun navegarParaFragmento(index: Int) {
-        if (index >= 0 && index < fragmentos.size) {
-            val fragment = fragmentos[index]
+        if (index >= 0 && index < LISTA_FRAGMENTOS.size) {
+            val fragment = LISTA_FRAGMENTOS[index]
 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.main, fragment)
@@ -93,16 +76,16 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
         nomeRaca: String = "",
         nomePersonagem: String = ""
     ) {
-        if (fragmentIndex < fragmentos.size - 1) {
+        if (FRAGMENT_INDEX < LISTA_FRAGMENTOS.size - 1) {
             // Armazenar o texto do fragmento atual
             val fragment = supportFragmentManager.findFragmentById(R.id.main) as? PersonagemFragment
             fragment?.let {
-                dadosPersonagem.add(it.getValorAtributo()) // Adiciona o texto do fragmento atual aos dados
+                DADOS_PERSONAGEM.add(it.getValorAtributo())
             }
 
             if (step == "EscolherRaca") {
                 GLOBAL_NOME_PERSONAGEM = nomePersonagem
-                personagem_X = when (nomeRaca.lowercase()) { // Corrigido aqui
+                PERSONAGEM_X = when (nomeRaca.lowercase()) {
                     "anão" -> NovoPersonagem(RacaAnao())
                     "anão da montanha" -> NovoPersonagem(RacaAnaoDaMontanha())
                     "anão da colina" -> NovoPersonagem(RacaAnaoDaColina())
@@ -145,7 +128,7 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
                         Toast.makeText(this, messageToast, Toast.LENGTH_SHORT).show()
                         return
                     }
-                    personagem_X.aplicar_forca(Forca(forcaInput))
+                    PERSONAGEM_X.aplicar_forca(Forca(forcaInput))
 
 
                 }
@@ -169,7 +152,7 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
                         Toast.makeText(this, messageToast, Toast.LENGTH_SHORT).show()
                         return
                     }
-                    personagem_X.aplicar_destreza(Destreza(destrezaInput))
+                    PERSONAGEM_X.aplicar_destreza(Destreza(destrezaInput))
 
                 }
                 //////////////////////////////////////
@@ -191,7 +174,7 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
                         Toast.makeText(this, messageToast, Toast.LENGTH_SHORT).show()
                         return
                     }
-                    personagem_X.aplicar_inteligencia(Inteliencia(inteligenciaInput))
+                    PERSONAGEM_X.aplicar_inteligencia(Inteliencia(inteligenciaInput))
 
                 }
 
@@ -215,7 +198,7 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
                         Toast.makeText(this, messageToast, Toast.LENGTH_SHORT).show()
                         return
                     }
-                    personagem_X.aplicar_carisma(Carisma(carismaInput))
+                    PERSONAGEM_X.aplicar_carisma(Carisma(carismaInput))
                 }
                 //////////////////////////////////////
                 //////////////////////////////////////
@@ -236,7 +219,7 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
                         Toast.makeText(this, messageToast, Toast.LENGTH_SHORT).show()
                         return
                     }
-                    personagem_X.aplicar_constituicao(Constituicao(constituicaoInput))
+                    PERSONAGEM_X.aplicar_constituicao(Constituicao(constituicaoInput))
 
                 }
 
@@ -258,28 +241,26 @@ class ActvCriarPersonagem : AppCompatActivity(), PersonagemFragment.OnFragmentIn
                         Toast.makeText(this, messageToast, Toast.LENGTH_SHORT).show()
                         return
                     }
-                    personagem_X.aplicar_sabedoria(Sabedoria(sabedoriaInput))
+                    PERSONAGEM_X.aplicar_sabedoria(Sabedoria(sabedoriaInput))
                 }
             }
 
 
-            fragmentIndex++
-            navegarParaFragmento(fragmentIndex)
+            FRAGMENT_INDEX++
+            navegarParaFragmento(FRAGMENT_INDEX)
 
         } else {
 
             if (step == "Finalizar") {
-                personagem_X.criar_personagem(GLOBAL_NOME_PERSONAGEM)
+                PERSONAGEM_X.criar_personagem(GLOBAL_NOME_PERSONAGEM)
             }
 
-            val finalizarFragment = fragmentos.last() as FinalizarFragment
+            val finalizarFragment = LISTA_FRAGMENTOS.last() as FinalizarFragment
             finalizarFragment.setDados("Salvando dados, aguarde ..")
 
             var databaseHelper = DatabaseHelper(this)
-            databaseHelper.insertPersonagem(personagem_X.recuperar_json_dados().toString())
-
-
-            navegarParaFragmento(fragmentIndex)
+            databaseHelper.insertPersonagem(PERSONAGEM_X.recuperar_json_dados().toString())
+            navegarParaFragmento(FRAGMENT_INDEX)
 
         }
     }

@@ -1,4 +1,4 @@
-package com.example.projeto_criar_personagem.Database
+package com.example.projeto_criar_personagem.ListarPersonagens
 
 
 import android.view.LayoutInflater
@@ -6,21 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projeto_criar_personagem.Database.Model.Personagem
 import com.example.projeto_criar_personagem.R
 
 class PersonagemAdapter(
-    private val personagens: List<Personagem>,
-    private val onPersonagemButtonClicked: (Personagem) -> Unit
+    private val PERSONAGEM: List<Personagem>,
+    private val ON_DELETE_CLICK: (Personagem) -> Unit,
+    private val ON_EDIT_CLICK: (Personagem) -> Unit
 ) : RecyclerView.Adapter<PersonagemAdapter.PersonagemViewHolder>() {
 
     class PersonagemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nomePersonagem: TextView = itemView.findViewById(R.id.textNomePersonagem)
         val valorXP: TextView = itemView.findViewById(R.id.textValorXP)
         val nomeRaca: TextView = itemView.findViewById(R.id.textNomeRaca)
-        val buttonAcao: ImageView = itemView.findViewById(R.id.btnDeletarPersonagem)
+        val buttonDeletar: ImageView = itemView.findViewById(R.id.btnDeletarPersonagem)
+        val buttonEditar: ImageView = itemView.findViewById(R.id.btnEdtPersonagem)
 
 
         // Força
@@ -78,13 +79,16 @@ class PersonagemAdapter(
     }
 
     override fun onBindViewHolder(holder: PersonagemViewHolder, position: Int) {
-        val personagem = personagens[position]
+        val personagem = PERSONAGEM[position]
 
         holder.nomePersonagem.text = personagem.nomePersonagem
         holder.valorXP.text = personagem.valorXP.toString()
         holder.nomeRaca.text = personagem.nomeRaca
-        holder.buttonAcao.setOnClickListener {
-            onPersonagemButtonClicked(personagem)
+        holder.buttonDeletar.setOnClickListener {
+            ON_DELETE_CLICK(personagem)
+        }
+        holder.buttonEditar.setOnClickListener {
+            ON_EDIT_CLICK(personagem)
         }
 
 
@@ -137,5 +141,5 @@ class PersonagemAdapter(
         holder.sabedoriaValorModificador.text = personagem.Sabedoria.valormodificador.toString()
     }
 
-    override fun getItemCount(): Int = personagens.size
+    override fun getItemCount(): Int = PERSONAGEM.size
 }

@@ -43,6 +43,31 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/btneDT"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:clickable="true"
+                android:layout_marginRight="10dp"
+                android:contentDescription="Delete"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:tint="@android:color/holo_red_dark"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true" />
+
+            <ImageView
+                android:id="@+id/btnEdtPersonagem"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="88dp"
+                android:layout_marginRight="88dp"
+                android:clickable="true"
+                android:contentDescription="Delete"
+                android:src="@android:drawable/ic_menu_edit"
+                android:tint="@android:color/holo_blue_light" />
+
+            <ImageView
                 android:id="@+id/btnDeletarPersonagem"
                 android:layout_width="24dp"
                 android:layout_height="24dp"

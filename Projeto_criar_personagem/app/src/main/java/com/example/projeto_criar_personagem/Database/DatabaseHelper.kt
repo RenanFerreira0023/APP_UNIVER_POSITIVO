@@ -14,7 +14,7 @@ class DatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "rpg_2.db"
+        private const val DATABASE_NAME = "rpg_3.db"
         private const val DATABASE_VERSION = 1
         private const val TABLE_PERSONAGEM = "Personagem"
 
@@ -58,12 +58,13 @@ class DatabaseHelper(context: Context) :
         private const val COLUMN_CARISMA_MOD = "carismaValormodificador"
 
         // Constituição
-        private const val COLUMN_CONSTITUICAO_FIXO = "constitucaoValorFixo"
-        private const val COLUMN_CONSTITUICAO_PONTOS = "constitucaoPontosInputados"
-        private const val COLUMN_CONSTITUICAO_CUSTO = "constitucaoValorCusto"
-        private const val COLUMN_CONSTITUICAO_BONUS = "constitucaoValorBonus"
-        private const val COLUMN_CONSTITUICAO_FINAL = "constitucaoValorAtributoFinal"
-        private const val COLUMN_CONSTITUICAO_MOD = "constitucaoValormodificador"
+        private const val COLUMN_CONSTITUICAO_FIXO = "constituicaoValorFixo"
+        private const val COLUMN_CONSTITUICAO_PONTOS = "constituicaoPontosInputados"
+        private const val COLUMN_CONSTITUICAO_CUSTO = "constituicaoValorCusto"
+        private const val COLUMN_CONSTITUICAO_BONUS = "constituicaoValorBonus"
+
+        private const val COLUMN_CONSTITUICAO_FINAL = "constituicaoValorAtributoFinal"
+        private const val COLUMN_CONSTITUICAO_MOD = "constituicaoValormodificador"
 
         // Sabedoria
         private const val COLUMN_SABEDORIA_FIXO = "sabedoriaValorFixo"
@@ -137,6 +138,160 @@ class DatabaseHelper(context: Context) :
         onCreate(db)
     }
 
+    // Função para buscar um personagem pelo ID
+    fun getPersonagemPorId(id: Long): Personagem? {
+        val db = this.readableDatabase
+        val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_PERSONAGEM WHERE $COLUMN_ID = ?", arrayOf(id.toString()))
+
+        return if (cursor.moveToFirst()) {
+            val personagem = Personagem(
+                id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                nomePersonagem = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOME_PERSONAGEM)),
+                valorXP = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_VALOR_XP)),
+                nomeRaca = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOME_RACA)),
+
+                // Atributos de Força
+                Forca = Atributo(
+                    valorFixo = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FORCA_FIXO)),
+                    pontosInputados = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FORCA_PONTOS)),
+                    valorCusto = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FORCA_CUSTO)),
+                    valorBonus = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FORCA_BONUS)),
+                    valorAtributoFinal = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FORCA_FINAL)),
+                    valormodificador = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FORCA_MOD))
+                ),
+
+                // Atributos de Destreza
+                Destreza = Atributo(
+                    valorFixo = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DESTREZA_FIXO)),
+                    pontosInputados = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DESTREZA_PONTOS)),
+                    valorCusto = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DESTREZA_CUSTO)),
+                    valorBonus = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DESTREZA_BONUS)),
+                    valorAtributoFinal = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DESTREZA_FINAL)),
+                    valormodificador = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DESTREZA_MOD))
+                ),
+
+                // Atributos de Inteligência
+                Inteligencia = Atributo(
+                    valorFixo = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_INTELIGENCIA_FIXO)),
+                    pontosInputados = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_INTELIGENCIA_PONTOS)),
+                    valorCusto = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_INTELIGENCIA_CUSTO)),
+                    valorBonus = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_INTELIGENCIA_BONUS)),
+                    valorAtributoFinal = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_INTELIGENCIA_FINAL)),
+                    valormodificador = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_INTELIGENCIA_MOD))
+                ),
+
+                // Atributos de Carisma
+                Carisma = Atributo(
+                    valorFixo = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARISMA_FIXO)),
+                    pontosInputados = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARISMA_PONTOS)),
+                    valorCusto = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARISMA_CUSTO)),
+                    valorBonus = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARISMA_BONUS)),
+                    valorAtributoFinal = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARISMA_FINAL)),
+                    valormodificador = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARISMA_MOD))
+                ),
+
+                // Atributos de Constituição
+                Constituicao = Atributo(
+                    valorFixo = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONSTITUICAO_FIXO)),
+                    pontosInputados = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONSTITUICAO_PONTOS)),
+                    valorCusto = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONSTITUICAO_CUSTO)),
+                    valorBonus = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONSTITUICAO_BONUS)),
+                    valorAtributoFinal = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONSTITUICAO_FINAL)),
+                    valormodificador = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONSTITUICAO_MOD))
+                ),
+
+                // Atributos de Sabedoria
+                Sabedoria = Atributo(
+                    valorFixo = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SABEDORIA_FIXO)),
+                    pontosInputados = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SABEDORIA_PONTOS)),
+                    valorCusto = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SABEDORIA_CUSTO)),
+                    valorBonus = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SABEDORIA_BONUS)),
+                    valorAtributoFinal = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SABEDORIA_FINAL)),
+                    valormodificador = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SABEDORIA_MOD))
+                )
+            )
+            cursor.close()
+            db.close()
+            personagem
+        } else {
+            cursor.close()
+            db.close()
+            null
+        }
+    }
+
+
+
+
+    fun updatePersonagem(personagem: Personagem): Boolean {
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues().apply {
+            put("nomePersonagem", personagem.nomePersonagem)
+            put("valorXP", personagem.valorXP)
+            put("nomeRaca", personagem.nomeRaca)
+
+// Atributos de Força
+            put("forcaValorFixo", personagem.Forca.valorFixo)
+            put("forcaPontosInputados", personagem.Forca.pontosInputados)
+            put("forcaValorCusto", personagem.Forca.valorCusto)
+            put("forcaValorBonus", personagem.Forca.valorBonus)
+            put("forcaValorAtributoFinal", personagem.Forca.valorAtributoFinal)
+            put("forcaValorModificador", personagem.Forca.valormodificador)
+
+// Atributos de Destreza
+            put("destrezaValorFixo", personagem.Destreza.valorFixo)
+            put("destrezaPontosInputados", personagem.Destreza.pontosInputados)
+            put("destrezaValorCusto", personagem.Destreza.valorCusto)
+            put("destrezaValorBonus", personagem.Destreza.valorBonus)
+            put("destrezaValorAtributoFinal", personagem.Destreza.valorAtributoFinal)
+            put("destrezaValorModificador", personagem.Destreza.valormodificador)
+
+// Atributos de Inteligência
+            put("inteligenciaValorFixo", personagem.Inteligencia.valorFixo)
+            put("inteligenciaPontosInputados", personagem.Inteligencia.pontosInputados)
+            put("inteligenciaValorCusto", personagem.Inteligencia.valorCusto)
+            put("inteligenciaValorBonus", personagem.Inteligencia.valorBonus)
+            put("inteligenciaValorAtributoFinal", personagem.Inteligencia.valorAtributoFinal)
+            put("inteligenciaValorModificador", personagem.Inteligencia.valormodificador)
+
+// Atributos de Carisma
+            put("carismaValorFixo", personagem.Carisma.valorFixo)
+            put("carismaPontosInputados", personagem.Carisma.pontosInputados)
+            put("carismaValorCusto", personagem.Carisma.valorCusto)
+            put("carismaValorBonus", personagem.Carisma.valorBonus)
+            put("carismaValorAtributoFinal", personagem.Carisma.valorAtributoFinal)
+            put("carismaValorModificador", personagem.Carisma.valormodificador)
+
+// Atributos de Constituição
+            put("constituicaoValorFixo", personagem.Constituicao.valorFixo)
+            put("constituicaoPontosInputados", personagem.Constituicao.pontosInputados)
+            put("constituicaoValorCusto", personagem.Constituicao.valorCusto)
+            put("constituicaoValorBonus", personagem.Constituicao.valorBonus)
+            put("constituicaoValorAtributoFinal", personagem.Constituicao.valorAtributoFinal)
+            put("constituicaoValorModificador", personagem.Constituicao.valormodificador)
+
+// Atributos de Sabedoria
+            put("sabedoriaValorFixo", personagem.Sabedoria.valorFixo)
+            put("sabedoriaPontosInputados", personagem.Sabedoria.pontosInputados)
+            put("sabedoriaValorCusto", personagem.Sabedoria.valorCusto)
+            put("sabedoriaValorBonus", personagem.Sabedoria.valorBonus)
+            put("sabedoriaValorAtributoFinal", personagem.Sabedoria.valorAtributoFinal)
+            put("sabedoriaValorModificador", personagem.Sabedoria.valormodificador)
+        }
+
+        // Atualize o personagem com base no ID
+        val success = db.update(
+            "Personagem", // Nome da tabela
+            contentValues, // Valores para atualizar
+            "id = ?",
+            arrayOf(personagem.id.toString())
+        )
+
+        db.close()
+        return success > 0
+    }
+
     fun deletePersonagem(id: Long): Int {
         val db = this.writableDatabase
         return db.delete(TABLE_PERSONAGEM, "$COLUMN_ID = ?", arrayOf(id.toString()))
@@ -207,6 +362,8 @@ class DatabaseHelper(context: Context) :
         db.close()
         return result != -1L
     }
+
+
 
     // Função para recuperar todos os personagens
     fun getAllPersonagens(): List<Personagem> {

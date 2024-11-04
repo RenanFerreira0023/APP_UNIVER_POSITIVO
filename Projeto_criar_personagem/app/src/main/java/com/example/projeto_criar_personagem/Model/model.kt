@@ -2,7 +2,7 @@ package com.example.projeto_criar_personagem.Database.Model
 
 data class Personagem(
     val id: Long,
-    val nomePersonagem: String,
+    var nomePersonagem: String,
     val valorXP: Int,
     val nomeRaca: String,
     val Forca: Atributo,

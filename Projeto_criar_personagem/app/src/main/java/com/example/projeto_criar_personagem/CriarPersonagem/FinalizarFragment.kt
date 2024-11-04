@@ -11,7 +11,7 @@ import com.example.projeto_criar_personagem.R
 
 class FinalizarFragment : Fragment() {
 
-    private lateinit var textoFinal: TextView
+    private lateinit var TXT_FINAL: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -19,20 +19,18 @@ class FinalizarFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_finalizar, container, false)
 
-        textoFinal = view.findViewById(R.id.textoFinal)
+        TXT_FINAL = view.findViewById(R.id.textoFinal)
         val btnFinalizar = view.findViewById<Button>(R.id.btnFinalizar)
 
         btnFinalizar.setOnClickListener {
-            // Finalize a atividade ou faça outra ação
+
             (activity as ActvCriarPersonagem).navegarParaProximoFragmento("Finalizar")
             activity?.finish()
         }
 
         return view
     }
-
-    fun setDados(jsonDados : String) {
-        // Verifique se os dados não estão vazios
-            textoFinal.text = jsonDados
+    fun setDados(msg : String) {
+        TXT_FINAL.text = msg
     }
 }

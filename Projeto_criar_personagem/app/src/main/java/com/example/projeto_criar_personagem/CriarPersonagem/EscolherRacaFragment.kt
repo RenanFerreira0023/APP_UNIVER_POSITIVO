@@ -16,15 +16,14 @@ import org.appsskilldeveloper.GLOBAL_UTIL
 
 class EscolherRacaFragment : Fragment() {
 
-    private lateinit var spinnerRacas: Spinner
-    private lateinit var btnProximo: Button
-    private lateinit var editNomePersonagem: EditText // Declare a variável para EditText
+    private lateinit var SPN_RACAS: Spinner
+    private lateinit var BTN_PROXIMO: Button
+    private lateinit var EDT_NOME_PERSONAGEM: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,24 +31,24 @@ class EscolherRacaFragment : Fragment() {
         // Infla o layout para este fragmento
         val view = inflater.inflate(R.layout.fragment_escolher_raca, container, false)
 
-        // Inicializa o Spinner, o Button e o EditText usando os IDs corretos
-        spinnerRacas = view.findViewById(R.id.spinnerRacas)
-        btnProximo = view.findViewById(R.id.btnProximo)
-        editNomePersonagem = view.findViewById<EditText>(R.id.editNomePersonagem) // Use o ID correto aqui
+        /////////////////////////////////////////////////
+        SPN_RACAS = view.findViewById(R.id.spinnerRacas)
+        BTN_PROXIMO = view.findViewById(R.id.btnProximo)
+        EDT_NOME_PERSONAGEM = view.findViewById<EditText>(R.id.editNomePersonagem)
 
-        // Preencher o Spinner com dados aleatórios
+        // Preencher o Spinner com dados de raça
         val racas = GLOBAL_UTIL.mostrar_menu_personagem()
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, racas)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerRacas.adapter = adapter
+        SPN_RACAS.adapter = adapter
 
         // Configurar o clique do botão
-        btnProximo.setOnClickListener {
-            val indiceRacaEscolhida = spinnerRacas.selectedItemPosition // Obtém o índice do item selecionado
+        BTN_PROXIMO.setOnClickListener {
+            val indiceRacaEscolhida = SPN_RACAS.selectedItemPosition
             val nomeRacaEscolhido = GLOBAL_UTIL.nome_raca_por_id(indiceRacaEscolhida + 1)
 
-            // Obter o valor do EditText
-            val nomePersonagem = editNomePersonagem.text.toString() // Converte o texto para String
+
+            val nomePersonagem = EDT_NOME_PERSONAGEM.text.toString()
 
             if (nomePersonagem.isEmpty()) {
                 Toast.makeText(

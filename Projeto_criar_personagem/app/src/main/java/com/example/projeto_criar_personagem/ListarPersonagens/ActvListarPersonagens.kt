@@ -10,14 +10,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projeto_criar_personagem.CriarPersonagem.EditarPersonagemFragment
+import com.example.projeto_criar_personagem.CriarPersonagem.PersonagemFragment
 import com.example.projeto_criar_personagem.Database.DatabaseHelper
-import com.example.projeto_criar_personagem.Database.PersonagemAdapter
 import com.example.projeto_criar_personagem.MainActivity
 import com.example.projeto_criar_personagem.R
-class ActvListarPersonagens : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: PersonagemAdapter
-    private lateinit var dbHelper: DatabaseHelper
+class ActvListarPersonagens : AppCompatActivity() , EditarPersonagemFragment.OnFragmentInteractionListener{
+    private lateinit var RECYCLERVIEW: RecyclerView
+    private lateinit var DB_HELPER: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,23 +30,43 @@ class ActvListarPersonagens : AppCompatActivity() {
         }
 
         // Inicializar o RecyclerView
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        RECYCLERVIEW = findViewById(R.id.recyclerView)
+        RECYCLERVIEW.layoutManager = LinearLayoutManager(this)
 
-        // Inicializar o DatabaseHelper
-        dbHelper = DatabaseHelper(this)
-
+        DB_HELPER = DatabaseHelper(this)
         // Recuperar todos os personagens do banco de dados
-        val personagens = dbHelper.getAllPersonagens()
+        val personagens = DB_HELPER.getAllPersonagens()
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        val recyclerView: RecyclerView = RECYCLERVIEW
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = PersonagemAdapter(personagens) { personagem ->
-            Toast.makeText(this, "Você deletou o personagem  ${personagem.nomePersonagem}", Toast.LENGTH_SHORT).show()
-        // deletar esse cara
-            dbHelper.deletePersonagem(personagem.id)
-        }
+        val adapter = PersonagemAdapter(personagens,
+            ON_DELETE_CLICK = { personagem ->
+                Toast.makeText(
+                    this,
+                    "Você deletou o personagem ${personagem.nomePersonagem}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                DB_HELPER.deletePersonagem(personagem.id)
+                recreate()
+            },
+            ON_EDIT_CLICK = { personagem ->
 
+
+                val editarFragment = EditarPersonagemFragment()
+
+
+                val bundle = Bundle()
+                bundle.putInt("personagemId", personagem.id.toInt())
+                editarFragment.arguments = bundle
+
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, editarFragment)
+                    .addToBackStack(null)
+                    .commit()
+
+            }
+        )
         recyclerView.adapter = adapter
 
         // Configurar o botão de voltar
@@ -54,7 +74,11 @@ class ActvListarPersonagens : AppCompatActivity() {
         buttonVoltar.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish() // Opcional: fecha esta activity
+            finish()
         }
+    }
+
+    override fun onFragmentViewCreated(fragment: PersonagemFragment) {
+        TODO("Not yet implemented")
     }
 }

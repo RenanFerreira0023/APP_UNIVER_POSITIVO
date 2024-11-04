@@ -11,24 +11,23 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.projeto_criar_personagem.R // Importar corretamente o R do seu pacote
-import org.appsskilldeveloper.personagem.NovoPersonagem
 
-class PersonagemFragment(private val titulo: String) : Fragment() {
+class PersonagemFragment(private val tituloParametro: String) : Fragment() {
 
-    private lateinit var edtValorAtributo: EditText
-    private lateinit var lbMsgResto: TextView
-    private lateinit var lbConstituicao: TextView
+    private lateinit var EDT_VALOR_ATRIBUTO: EditText
+    private lateinit var LB_MSG_RESTO: TextView
+    private lateinit var LB_CONSTITUICAO: TextView
+    private var LISTENER_FRAGMENT_INTERACTION: OnFragmentInteractionListener? = null
 
+    // Essa interface é responsavel por transacionar os itens do fragmento pra activity
     interface OnFragmentInteractionListener {
         fun onFragmentViewCreated(fragment: PersonagemFragment)
     }
 
-    private var listener: OnFragmentInteractionListener? = null
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
-            listener = context
+            LISTENER_FRAGMENT_INTERACTION = context
         } else {
             throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
@@ -40,45 +39,38 @@ class PersonagemFragment(private val titulo: String) : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_personagem, container, false)
 
-        // Inicializa as views
-        lbConstituicao = view.findViewById(R.id.lblNomeConstituicao)
-        edtValorAtributo = view.findViewById(R.id.edtValorAtributo)
-        lbMsgResto = view.findViewById(R.id.lblRestoValor)
-        val btnProximo: Button = view.findViewById(R.id.btnProximo)
+        EDT_VALOR_ATRIBUTO = view.findViewById(R.id.edtValorAtributo)
+        LB_MSG_RESTO = view.findViewById(R.id.lblRestoValor)
 
-        // Configura o título do fragmento
-        lbConstituicao.text = titulo
+        LB_CONSTITUICAO = view.findViewById(R.id.lblNomeConstituicao)
+        LB_CONSTITUICAO.text = tituloParametro
 
 
         // Listener do botão
+        val btnProximo: Button = view.findViewById(R.id.btnProximo)
         btnProximo.setOnClickListener {
-            val valorAtributo = edtValorAtributo.text.toString()
+            val valorAtributo = EDT_VALOR_ATRIBUTO.text.toString()
             if (valorAtributo.isEmpty()) {
                 Toast.makeText(requireContext(), "Informe um valor de atributo", Toast.LENGTH_SHORT).show()
             } else {
                 (activity as ActvCriarPersonagem).navegarParaProximoFragmento(
-                    "Atributos", nomeAtributo = titulo, valorAtributo = getValorAtributo()
+                    "Atributos", nomeAtributo = tituloParametro, valorAtributo = getValorAtributo()
                 )
             }
         }
 
         // Notifica a atividade que o fragmento foi criado
-        listener?.onFragmentViewCreated(this)
-
+        LISTENER_FRAGMENT_INTERACTION?.onFragmentViewCreated(this)
         return view
     }
 
     fun atualizarTextoResto(novoTexto: String) {
 
-        lbMsgResto.text = novoTexto
+        LB_MSG_RESTO.text = novoTexto
     }
-
-
 
     fun getValorAtributo(): String {
-        return edtValorAtributo.text.toString()
+        return EDT_VALOR_ATRIBUTO.text.toString()
     }
-
-
 
 }

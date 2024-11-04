@@ -17,10 +17,10 @@ import java.util.concurrent.Executors
 
 class MyForegroundService : Service(){
 
-    private var context: Context? = null
+    private var CONTEXT: Context? = null
     private val NOTIFICATION_ID = 1
     private val CHANNEL_ID = "100"
-    private var isDestroyed = false
+    private var IS_DESTROYED = false
 
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -29,7 +29,7 @@ class MyForegroundService : Service(){
 
     override fun onCreate() {
         super.onCreate()
-        context = this
+        CONTEXT = this
         startForeground(NOTIFICATION_ID,showNotification("esse é o content"))
     }
 
@@ -53,7 +53,7 @@ class MyForegroundService : Service(){
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Toast.makeText(context,"starting service...",Toast.LENGTH_SHORT).show()
+        Toast.makeText(CONTEXT,"starting service...",Toast.LENGTH_SHORT).show()
         doTask()
         return super.onStartCommand(intent, flags, startId)
     }
@@ -65,7 +65,7 @@ class MyForegroundService : Service(){
         val handler = Handler(Looper.getMainLooper())
         executorService.execute{
         for (i in 0.. 99){
-                if(isDestroyed){
+                if(IS_DESTROYED){
                     break
                 }
                 data[0] = i
@@ -91,8 +91,8 @@ class MyForegroundService : Service(){
 
     override fun onDestroy() {
         super.onDestroy()
-        isDestroyed = true
-        Toast.makeText(context,"stopping service...",Toast.LENGTH_SHORT).show()
+        IS_DESTROYED = true
+        Toast.makeText(CONTEXT,"stopping service...",Toast.LENGTH_SHORT).show()
 
     }
 

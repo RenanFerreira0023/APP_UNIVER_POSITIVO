@@ -11,19 +11,19 @@ import androidx.core.app.NotificationCompat
 import com.example.projeto_criar_personagem.R
 
 class NotificationSimples(val context: Context) {
-    private val notificationChannel = "Notification"
-    private val notificationId = 1000
-    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    private var request = 0
+    private val NOTIFICATION_CHANNEL = "Notification"
+    private val NOTIFICATI = 1000
+    private val NOTIFICATION_MANAGER = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private var LOOP_REQUEST = 0
 
     fun initNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                notificationChannel,
+                NOTIFICATION_CHANNEL,
                 "Notificações de Botão",
                 NotificationManager.IMPORTANCE_HIGH
             )
-            notificationManager.createNotificationChannel(channel)
+            NOTIFICATION_MANAGER.createNotificationChannel(channel)
         }
 
         // Layout personalizado da notificação
@@ -33,14 +33,14 @@ class NotificationSimples(val context: Context) {
         customView.setTextViewText(R.id.text2, "Mensagem de teste da notificação")
 
         // Configuração do NotificationCompat.Builder
-        val builder = NotificationCompat.Builder(context, notificationChannel)
+        val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle()) // Estilo decorado para layout personalizado
             .setCustomContentView(customView) // Define o layout personalizado
             .setAutoCancel(true) // Fecha a notificação ao clicar
 
         // Exibe a notificação
-        notificationManager.notify(notificationId, builder.build())
+        NOTIFICATION_MANAGER.notify(NOTIFICATI, builder.build())
     }
 
     private fun getBroadcast(msg: String): PendingIntent {
@@ -48,7 +48,7 @@ class NotificationSimples(val context: Context) {
             action = "BTN_ACTION"
             putExtra("msg", msg)
         }
-        request++
-        return PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_IMMUTABLE)
+        LOOP_REQUEST++
+        return PendingIntent.getBroadcast(context, LOOP_REQUEST, intent, PendingIntent.FLAG_IMMUTABLE)
     }
 }

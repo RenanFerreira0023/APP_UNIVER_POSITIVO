@@ -17,10 +17,10 @@ import com.example.projeto_criar_personagem.Util.NotificationSimples
 import com.example.projeto_criar_personagem.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
-    lateinit var notificationSimples:NotificationSimples
+    lateinit var NOTIFICATION_SIMPLES:NotificationSimples
 
-    private lateinit var binding: ActivityMainBinding
-    var foregroundServiceIntent: Intent? = null
+    private lateinit var BINDING: ActivityMainBinding
+    var FOREGROUND_SERVICE_INTENT: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,51 +28,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
 
 
-
-        val btnCriarPersonagem: Button = findViewById(R.id.btnCriarPersonagem)
-        val btnListarPersonagem: Button = findViewById(R.id.btnListarPersonagem)
-
-        btnCriarPersonagem.setOnClickListener(this)
-        btnListarPersonagem.setOnClickListener(this)
-
         /////////////////////////////////////////////
-        /////////////////////////////////////////////
-
-        val btnNotificacaoSimples: Button =findViewById(R.id.notificacaoSimples)
-        notificationSimples= NotificationSimples(this)
-        btnNotificacaoSimples.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)
-            {
-                val permision_code=11
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),permision_code)
-                }
-            }else{
-                notificationSimples.initNotification()
-            }
-        }
+        NOTIFICATION_SIMPLES = NotificationSimples(this)
 
 
         /////////////////////////////////////////////
-        /////////////////////////////////////////////
+        FOREGROUND_SERVICE_INTENT = Intent(this, MyForegroundService::class.java)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
+
+        /////////////////////////////////////////////
+        BINDING = ActivityMainBinding.inflate(layoutInflater)
+        val view = BINDING.root
         setContentView( view)
-        foregroundServiceIntent = Intent(this, MyForegroundService::class.java)
-
-        val btnStart: Button = findViewById(R.id.btnStart)
-        btnStart.setOnClickListener {
-            startService(foregroundServiceIntent)
-        }
-
-        val btnStop: Button = findViewById(R.id.btnStop)
-        btnStop.setOnClickListener {
-            stopService(foregroundServiceIntent)
-
-        }
-
-
+        BINDING.btnCriarPersonagem.setOnClickListener(this)
+        BINDING.btnListarPersonagem.setOnClickListener(this)
+        BINDING.btnStart.setOnClickListener(this)
+        BINDING.btnStop.setOnClickListener(this)
+        BINDING.notificacaoSimples.setOnClickListener(this)
 
     }
 
@@ -85,6 +57,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btnListarPersonagem -> {
                 val intent = Intent(this, ActvListarPersonagens::class.java)
                 startActivity(intent)
+            }
+            R.id.notificacaoSimples -> {
+                if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)
+                {
+                    val permision_code = 11
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),permision_code)
+                    }
+                }else{
+                    NOTIFICATION_SIMPLES.initNotification()
+                }
+            }
+            R.id.btnStart -> {
+                startService(FOREGROUND_SERVICE_INTENT)
+            }
+            R.id.btnStop -> {
+                stopService(FOREGROUND_SERVICE_INTENT)
             }
         }
     }
